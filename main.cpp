@@ -19,13 +19,41 @@ public:
         name = accNum;
         balance = initialBalance;
     }
+    // Deposit Money
+    void deposit(double amount){
+        if (amount > 0){
+        balance += amount;
+        cout << " Successfully deposited $" << amount
+                << ". New Balance: $"<< balance << endl;
+        }
+        else
+        {
+            cout << "Invalid deposit amount.\n";
+        }
+    }
+
+    // Withdraw Money
+    void withdraw(double amount){
+        if (amount <= 0){
+            cout << "Invalid withdrawal amount. \n";
+        }else if (amount > balance){
+            cout << "Insuffiencent funds. Current balance: $"<< balance << endl;
+        }else{
+            balance -= amount;
+            cout << "Insufficient funds. Current balance:   $"<< amount
+                    <<". Remaning balance: $" << balance << endl;
+        }
+    }
 
     //A place holder function 
     void displayAccount(){
+        cout << "\n ===== Account Details =====\n";
         cout << "Account Number:    "  << accoountNumber << endl;
         cout << "Name:  " << name << endl;
         cout << "Balance:  $ " << balance << endl;
+        cout << "================================\n"
     }
+
     // Get account number (to find accounts later)
     int getAccountNumber(){
         return accoountNumber;
@@ -72,15 +100,66 @@ int main(){
                     }
                 
                 
-            case 2:
-                cout << "Option 2: Deposit (coming soon)\n";
+            case 2:{
+                    int accNum;
+                    double amount;
+                    cout << "Enter Account Number:  ";
+                    cin >> accNum;
+
+                    bool found = false;
+                    for(auto &acc : accounts){
+                        if (acc.getAccountNumber() == accNum){
+                            cout << "Enter deposit amount:  ";
+                            cin >> amount;
+                            acc.deposit(amount);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found){
+                        cout << "Account not found. \n";
+                    }
+                    break;
+                }                
+            case 3:{
+                int accNum;
+                double amount;
+                cout << "Enter Account Number:  ";
+                cin >> accNum;
+
+                bool found = false;
+                for (auto &acc : accounts){
+                    if (acc.getAccountNumber() == accNum){
+                        cout << "Enter withdrawal amount:   ";
+                        cin >> amount;
+                        acc.withdraw(amount);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found){
+                    cout << "Account not found. \n";
+                }
                 break;
-            case 3:
-                cout << "Option 3: Withdraw (coming soon)";
+            }
+            case 4: {
+                int accNum;
+                cout << "Enter Account Number:  ";
+                cin >> accNum;
+
+                bool found = false;
+                for (auto &acc : accounts){
+                    if (acc.getAccountNumber() == accNum){
+                        acc.displayAccount();
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found){
+                    cout << "Account not found. \n";
+                }
                 break;
-            case 4:
-                cout << "Option 4: Check Balance (coming soon)\n";
-                break;
+            }
             case 5:
                 cout << "Option 5: Exiting Program...\n";
                 break;
