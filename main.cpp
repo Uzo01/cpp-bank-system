@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+
 
 using namespace std;
 
@@ -22,7 +24,11 @@ public:
     void displayAccount(){
         cout << "Account Number:    "  << accoountNumber << endl;
         cout << "Name:  " << name << endl;
-        cout << "Balance:   " << balance << endl;
+        cout << "Balance:  $ " << balance << endl;
+    }
+    // Get account number (to find accounts later)
+    int getAccountNumber(){
+        return accoountNumber;
     }
 };
 
@@ -38,6 +44,7 @@ void showMenu(){
 }
 
 int main(){
+    vector<BankAccount> accounts; //List of all accounts
     int choice;
 
     do {
@@ -45,9 +52,26 @@ int main(){
         cin >> choice;
 
         switch (choice){
-            case 1:
-                cout << "Option 1: Craete Account (coming soon!)\n";
-                break;
+            case 1:{
+                    int accNum;
+                    string accName;
+                    double initialBalance;
+
+                    cout << "Enter Account Number:  ";
+                    cin >> accNum;
+                    cout << "Enter Name:    ";
+                    cin.ignore(); // clear all input buffer
+                    getline(cin, accName);
+                    cout << "Enter Intial Balance:  ";
+                    cin >> initialBalance;
+                    BankAccount newAccount(accNum, accName, initialBalance);
+                    accounts.push_back(newAccount);
+
+                    cout << "Account created succesfully!\n";
+                    break;
+                    }
+                
+                
             case 2:
                 cout << "Option 2: Deposit (coming soon)\n";
                 break;
