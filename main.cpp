@@ -1,64 +1,9 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include "BankAccount.h"
 
 
 using namespace std;
-
-//Step 1: Create a BankAccount class 
-class BankAccount{
-private: 
-    int accoountNumber;
-    string name;
-    double balance;
-
-public:
-    //constuctor 
-    BankAccount(int accNum, string accName, double initialBalance){
-        accoountNumber = accNum;
-        name = accNum;
-        balance = initialBalance;
-    }
-    // Deposit Money
-    void deposit(double amount){
-        if (amount > 0){
-        balance += amount;
-        cout << " Successfully deposited $" << amount
-                << ". New Balance: $"<< balance << endl;
-        }
-        else
-        {
-            cout << "Invalid deposit amount.\n";
-        }
-    }
-
-    // Withdraw Money
-    void withdraw(double amount){
-        if (amount <= 0){
-            cout << "Invalid withdrawal amount. \n";
-        }else if (amount > balance){
-            cout << "Insuffiencent funds. Current balance: $"<< balance << endl;
-        }else{
-            balance -= amount;
-            cout << "Insufficient funds. Current balance:   $"<< amount
-                    <<". Remaning balance: $" << balance << endl;
-        }
-    }
-
-    //A place holder function 
-    void displayAccount(){
-        cout << "\n ===== Account Details =====\n";
-        cout << "Account Number:    "  << accoountNumber << endl;
-        cout << "Name:  " << name << endl;
-        cout << "Balance:  $ " << balance << endl;
-        cout << "================================\n"
-    }
-
-    // Get account number (to find accounts later)
-    int getAccountNumber(){
-        return accoountNumber;
-    }
-};
 
 // Step 2: Menu Function
 void showMenu(){
@@ -92,6 +37,7 @@ int main(){
                     getline(cin, accName);
                     cout << "Enter Intial Balance:  ";
                     cin >> initialBalance;
+
                     BankAccount newAccount(accNum, accName, initialBalance);
                     accounts.push_back(newAccount);
 

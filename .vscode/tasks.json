@@ -2,19 +2,19 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "clean build and run C++",
+            "label": "Build and Run Bank App",
             "type": "shell",
-            "command": "powershell",
+            "command": "cmd.exe",
             "args": [
-                "-Command",
-                "if (Test-Path .\\bankapp.exe) { Remove-Item .\\bankapp.exe }; g++ main.cpp -o bankapp.exe; .\\bankapp.exe"
+                "/d",
+                "/c",
+                "g++ main.cpp BankAccount.cpp -o bankapp.exe && bankapp.exe"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": "$gcc",
-            "detail": "Clean, compile and run C++ program"
+            "problemMatcher": ["$gcc"]
         }
     ]
 }
