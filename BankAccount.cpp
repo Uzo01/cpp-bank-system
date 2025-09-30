@@ -1,47 +1,57 @@
 #include "BankAccount.h"
 #include <iostream>
+#include <fstream>
+#include <ctime>
 
 using namespace std;
 
 
 // Contructor 
-BankAccount::BankAccount(int accNum, string accName, double intialbalance) {
-    accountNumber = accNum;
-    name = accName;
-    balance = intialbalance;
-}
+BankAccount::BankAccount(int accNum, const std::string& name, double initialBalance)
+    : accountNumber(accNum), holderName(name), balance(initialBalance) {}
 
 void BankAccount::deposit(double amount){
-    if (amount > 0){
-        balance += amount;
-        cout << "Successfully deposited $" << amount
-                << ". New balance:  $" << balance << endl;
-    }else{
-        cout << "Invalid deposit amount. \n";
-    }
+   balance += amount;
+
+
+   // log transaction
+   time_t now = time(0);
+   transactions.push_back({ctime(&now), "Withdraw", amount, balance});
 }
 
 void BankAccount::withdraw(double amount){
-    if (amount > 0){
-        balance += amount;
-        cout << " Invalid withdrawal amount. \n";
-    }else if(amount > balance){
-        cout << "Insufficient funds. Current balance:   $ " << balance << endl;
-    }else{
-        balance -= amount;
-        cout << "Successfully withdrew $" << amount
-                << ". Remaining balance:    $" << balance << endl;
+    if (amount > balance) {
+        cout << "Insufficient Funds.\n";
+        return;
     }
+    balance -= amount;
+
+    // log transaction
+    time_t now = time(0);
+    transactions.push_back({ctime(&now), "Withdraw", amount, balance});
 }
 
-void BankAccount::displayAccount(){
-    cout << "\n===== Account Details =====\n";
-    cout << "Account Number:    " << accountNumber << endl;
-    cout << "Name:  " << name << accountNumber << endl;
-    cout << "Balance:   $" << balance << endl;
-    cout << "=================================\n";
+double BankAccount::getBalance() const{
+    return balance;
 }
 
-int BankAccount::getAccountNumber(){
-    return accountNumber;
+void BankAccount::exportStatement(const string& filename) const{
+    ofstream file(filename);
+
+    if (!file)
+    {
+        cerr << "Error opening file:    " << filename << "\n";
+        return;
+    }
+
+    file << "Date,Type,Amount,Balance\n";
+    for (const auto& t : transactions) {
+        file << t.date.substr(0, t.date.size()-1) << ","  // remove newline from ctime
+             << t.type << ","
+             << t.amount << ","
+             << t.balanceAfter << "\n";
+    }
+
+    file.close();
+    std::cout << "Bank statement exported to " << filename << "\n";
 }
