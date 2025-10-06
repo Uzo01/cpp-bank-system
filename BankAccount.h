@@ -1,38 +1,31 @@
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
 
-
 #include <string>
 #include <vector>
 
-using namespace std;
-
 struct Transaction {
-    string date;
-    string type;
+    std::string date;
+    std::string type;
     double amount;
     double balanceAfter;
 };
 
-class BankAccount{
-    private:
+class BankAccount {
+private:
     int accountNumber;
-    string holderName;
+    std::string holderName;
     double balance;
-    vector<Transaction> transactions;
+    std::vector<Transaction> transactions;
 
-    public:
-    // Constructor
-    BankAccount(int accNum, const string& name, double intialbalance = 0.0);
-
-    // Methods
+public:
+    BankAccount(int accNum, const std::string& name, double initialBalance = 0.0);
     void deposit(double amount);
     void withdraw(double amount);
     double getBalance() const;
-
-    void exportStatement(const string& filename) const;
-
-
+    int getAccountNumber() const { return accountNumber; }
+    std::string getHolderName() const { return holderName; }
+    void exportStatement(const std::string& filename) const;
 };
 
-#endif
+#endif // BANKACCOUNT_H

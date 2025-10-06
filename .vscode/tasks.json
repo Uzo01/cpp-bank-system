@@ -8,7 +8,7 @@
             "args": [
                 "/d",
                 "/c",
-                "g++ main.cpp BankAccount.cpp -o bankapp.exe && bankapp.exe"
+                "g++ main.cpp BankAccount.cpp BankManager.cpp BankingGUI.cpp C:/VSCode/cpp/bank-system/imgui-master/imgui.cpp C:/VSCode/cpp/bank-system/imgui-master/imgui_draw.cpp C:/VSCode/cpp/bank-system/imgui-master/imgui_tables.cpp C:/VSCode/cpp/bank-system/imgui-master/imgui_widgets.cpp C:/VSCode/cpp/bank-system/imgui-master/backends/imgui_impl_glfw.cpp C:/VSCode/cpp/bank-system/imgui-master/backends/imgui_impl_opengl3.cpp -I C:/VSCode/cpp/bank-system/imgui-master -I C:/VSCode/cpp/bank-system/imgui-master/backends -I C:/Libraries/glfw-3.4.bin.WIN64/include -L C:/Libraries/glfw-3.4.bin.WIN64/lib-mingw-w64 -lglfw3 -lopengl32 -lgdi32 -o bankapp.exe && bankapp.exe"
             ],
             "group": {
                 "kind": "build",

@@ -1,57 +1,68 @@
 #include "BankAccount.h"
-#include <iostream>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <ctime>
 
-using namespace std;
+std::string getCurrentDate() {
+    std::time_t now = std::time(nullptr);
+    std::tm* localTime = std::localtime(&now);
+    std::stringstream ss;
+    ss << std::put_time(localTime, "%Y-%m-%d");
+    return ss.str();
+}
 
-
-// Contructor 
 BankAccount::BankAccount(int accNum, const std::string& name, double initialBalance)
-    : accountNumber(accNum), holderName(name), balance(initialBalance) {}
-
-void BankAccount::deposit(double amount){
-   balance += amount;
-
-
-   // log transaction
-   time_t now = time(0);
-   transactions.push_back({ctime(&now), "Withdraw", amount, balance});
-}
-
-void BankAccount::withdraw(double amount){
-    if (amount > balance) {
-        cout << "Insufficient Funds.\n";
-        return;
+    : accountNumber(accNum), holderName(name), balance(initialBalance) {
+    if (initialBalance > 0) {
+        Transaction initial;
+        initial.date = getCurrentDate();
+        initial.type = "Initial Deposit";
+        initial.amount = initialBalance;
+        initial.balanceAfter = balance;
+        transactions.push_back(initial);
     }
-    balance -= amount;
-
-    // log transaction
-    time_t now = time(0);
-    transactions.push_back({ctime(&now), "Withdraw", amount, balance});
 }
 
-double BankAccount::getBalance() const{
+void BankAccount::deposit(double amount) {
+    if (amount > 0) {
+        balance += amount;
+        Transaction deposit;
+        deposit.date = getCurrentDate();
+        deposit.type = "Deposit";
+        deposit.amount = amount;
+        deposit.balanceAfter = balance;
+        transactions.push_back(deposit);
+    }
+}
+
+void BankAccount::withdraw(double amount) {
+    if (amount > 0 && balance >= amount) {
+        balance -= amount;
+        Transaction withdrawal;
+        withdrawal.date = getCurrentDate();
+        withdrawal.type = "Withdrawal";
+        withdrawal.amount = -amount;
+        withdrawal.balanceAfter = balance;
+        transactions.push_back(withdrawal);
+    }
+}
+
+double BankAccount::getBalance() const {
     return balance;
 }
 
-void BankAccount::exportStatement(const string& filename) const{
-    ofstream file(filename);
-
-    if (!file)
-    {
-        cerr << "Error opening file:    " << filename << "\n";
-        return;
+void BankAccount::exportStatement(const std::string& filename) const {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        file << "Account Number: " << accountNumber << "\n";
+        file << "Holder Name: " << holderName << "\n";
+        file << "Current Balance: " << std::fixed << std::setprecision(2) << balance << "\n";
+        file << "Date,Type,Amount,Balance After\n";
+        for (const auto& transaction : transactions) {
+            file << transaction.date << "," << transaction.type << ","
+                 << std::fixed << std::setprecision(2) << transaction.amount << ","
+                 << std::fixed << std::setprecision(2) << transaction.balanceAfter << "\n";
+        }
     }
-
-    file << "Date,Type,Amount,Balance\n";
-    for (const auto& t : transactions) {
-        file << t.date.substr(0, t.date.size()-1) << ","  // remove newline from ctime
-             << t.type << ","
-             << t.amount << ","
-             << t.balanceAfter << "\n";
-    }
-
-    file.close();
-    std::cout << "Bank statement exported to " << filename << "\n";
 }

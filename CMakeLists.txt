@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 3.10)
+project(BankingSystem)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find GLFW and OpenGL
+find_package(glfw3 3.3 REQUIRED)
+find_package(OpenGL REQUIRED)
+
+# Include ImGui files
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/imgui)
+add_library(imgui STATIC
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui PUBLIC ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
+# Add executable
+add_executable(BankingSystem
+    main.cpp
+    BankAccount.cpp
+    BankManager.cpp
+    BankingGUI.cpp
+)
+
+# Link libraries
+target_include_directories(BankingSystem PRIVATE ${CMAKE_SOURCE_DIR})
+target_link_libraries(BankingSystem PRIVATE imgui glfw OpenGL::GL)
